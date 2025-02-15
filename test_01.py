@@ -1,8 +1,16 @@
 import streamlit as st
 import numpy as np
-from scipy.stats import norm
 import matplotlib.pyplot as plt
+from scipy.stats import norm
 
+# Add missing dependencies
+# In your requirements.txt, include:
+# streamlit
+# numpy
+# scipy
+# matplotlib
+
+# Black-Scholes pricing function
 def black_scholes(S, K, T, r, sigma, option_type='call'):
     d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
     d2 = d1 - sigma * np.sqrt(T)
@@ -14,6 +22,7 @@ def black_scholes(S, K, T, r, sigma, option_type='call'):
 
 st.title("Black-Scholes Option Pricing Tool")
 
+# Input fields
 S = st.number_input("Stock Price (S0)", value=100.0)
 K = st.number_input("Strike Price (K)", value=100.0)
 T = st.number_input("Time to Maturity (T in years)", value=1.0)
@@ -21,17 +30,17 @@ r = st.number_input("Risk-free Rate (r)", value=0.05)
 sigma = st.number_input("Volatility (σ)", value=0.2)
 option_type = st.selectbox("Option Type", ["call", "put"])
 
+# Calculate option price and Greeks
 if st.button("Calculate"):
     price, d1, d2 = black_scholes(S, K, T, r, sigma, option_type)
     st.success(f"The {option_type} option price is: {price:.2f}")
 
-    # Display Greeks
     st.write("### Option Greeks")
     st.write(f"Delta: {norm.cdf(d1) if option_type == 'call' else norm.cdf(d1)-1:.4f}")
     st.write(f"Gamma: {norm.pdf(d1) / (S * sigma * np.sqrt(T)):.4f}")
     st.write(f"Vega: {S * norm.pdf(d1) * np.sqrt(T):.4f}")
 
-    # Plot Price vs. Strike
+    # Plotting results
     strikes = np.linspace(K * 0.5, K * 1.5, 50)
     prices = [black_scholes(S, k, T, r, sigma, option_type)[0] for k in strikes]
     plt.figure()
@@ -40,3 +49,9 @@ if st.button("Calculate"):
     plt.xlabel("Strike Price")
     plt.ylabel("Option Price")
     st.pyplot(plt)
+
+# Add a `requirements.txt` file to your repo with:
+# streamlit
+# numpy
+# scipy
+# matplotlib
