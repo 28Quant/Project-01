@@ -22,4 +22,4 @@ option_type = st.selectbox("Option Type", ["call", "put"])
 if st.button("Calculate"):
     price = black_scholes(S, K, T, r, sigma, option_type)
     st.success(f"The {option_type} option price is: {price:.2f}")
-```
+
